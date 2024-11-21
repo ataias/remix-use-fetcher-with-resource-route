@@ -1,11 +1,13 @@
+import type { LinksFunction } from "@remix-run/node";
 import {
+  data,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
 
@@ -22,7 +24,26 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader() {
+  const messagePromise = (async () => {
+    await sleep(randomIntFromInterval(100, 2000));
+    return "hello world root";
+  })();
+  return data({
+    message: messagePromise,
+  });
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function randomIntFromInterval(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -42,4 +63,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />;
+}
+
+export function ErrorBoundary() {
+  return <div>Error root</div>;
 }
