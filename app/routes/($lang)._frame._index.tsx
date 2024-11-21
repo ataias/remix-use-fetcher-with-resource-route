@@ -29,14 +29,16 @@ const run = (
 export default function Index() {
   const revalidator = useRevalidator();
 
+  // If you comment the following useEffect, the error does not happen
   useEffect(() => {
-    console.log(">> state: ", revalidator.state);
     revalidator.revalidate();
   }, [revalidator]);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center">
       <SomeFetcher id={1} />
+      <SomeFetcher id={2} />
+      <SomeFetcher id={3} />
     </div>
   );
 }
@@ -72,6 +74,13 @@ function SomeFetcher({ id }: { id: number }) {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  if (error) console.error("Error Boundary _index:", error);
-  return <div>Error _index</div>;
+  useEffect(() => {
+    if (error) console.error("Error Boundary _index:", error);
+  }, [error]);
+
+  return (
+    <div>
+      <h1>Error _index</h1>
+    </div>
+  );
 }

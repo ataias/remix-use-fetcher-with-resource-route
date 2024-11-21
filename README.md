@@ -1,8 +1,8 @@
-# Welcome to Remix!
+# Fetcher Revalidation Error with lazyRouteDiscovery
 
-- 📖 [Remix docs](https://remix.run/docs)
+This repository reproduces a bug in Remix 2.14.0 with useFetcher for non-previously discovered routes. It happens when `revalidator.revalidate()` is called with routes that need to be discovered.
 
-## Development
+## Reproducing
 
 Run the dev server:
 
@@ -10,31 +10,24 @@ Run the dev server:
 npm run dev
 ```
 
-## Deployment
+Open a new browser tab and hit `localhost:5173`
 
-First, build your app for production:
+You should see the page hits an Error boundary, showing `Error _index`. In the console, you should see:
 
-```sh
-npm run build
+```txt
+($lang)._frame._index.tsx:75 Error Boundary _index: ErrorResponseImpl {status: 404, statusText: 'Not Found', internal: true, data: 'Error: No route matches URL "/en-br/api/hello-world-1?fetcher-1"', error: Error: No route matches URL "/en-br/api/hello-world-1?fetcher-1"
+    at getInternalRouterError (htt…} Error Component Stack
+    at ErrorBoundary (($lang)._frame._index.tsx:73:17)
+    at RenderErrorBoundary (@remix-run_react.js?v=d2b72bff:367:5)
+    at Outlet (@remix-run_react.js?v=d2b72bff:775:26)
+    at Frame (<anonymous>)
+    at RenderedRoute (@remix-run_react.js?v=d2b72bff:407:5)
+    at RenderErrorBoundary (@remix-run_react.js?v=d2b72bff:367:5)
+    at Outlet (@remix-run_react.js?v=d2b72bff:775:26)
+    at App (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+    at Layout (root.tsx:45:26)
 ```
 
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+For more info, check [app/routes/($lang)._frame._index.tsx](app/routes/($lang)._frame._index.tsx)
