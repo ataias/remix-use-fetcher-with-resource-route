@@ -1,6 +1,6 @@
 # Fetcher Revalidation Error with lazyRouteDiscovery
 
-This repository reproduces a bug in Remix 2.14.0 with useFetcher for non-previously discovered routes. It happens when `revalidator.revalidate()` is called with routes that need to be discovered.
+This repository reproduces a bug in Remix 2.14.0 and also 2.15.0 with useFetcher for non-previously discovered routes. It happens when `revalidator.revalidate()` is called with routes that need to be discovered.
 
 ## Reproducing
 
